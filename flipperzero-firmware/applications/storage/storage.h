@@ -346,4 +346,21 @@ void storage_get_next_filename(
 
 #ifdef __cplusplus
 }
-#endif
+
+// FuriString* overload for storage_get_next_filename
+#include <furi/core/string.h>
+inline void storage_get_next_filename(
+    Storage*    storage,
+    const char* dirname,
+    const char* filename,
+    const char* fileextension,
+    FuriString* nextfilename,
+    uint8_t     max_len) {
+    string_t tmp;
+    string_init(tmp);
+    storage_get_next_filename(storage, dirname, filename, fileextension, tmp, max_len);
+    furi_string_set_str(nextfilename, string_get_cstr(tmp));
+    string_clear(tmp);
+}
+
+#endif // __cplusplus

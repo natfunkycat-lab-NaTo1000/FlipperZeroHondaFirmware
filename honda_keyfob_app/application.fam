@@ -1,0 +1,19 @@
+App(
+    appid="honda_keyfob",
+    name="Honda KeyFob",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="honda_keyfob_app",
+    cdefines=["APP_HONDA_KEYFOB"],
+    requires=[
+        "gui",
+        "dialogs",
+        "subghz",
+    ],
+    fap_icon="honda_keyfob_10px.png",
+    fap_category="Sub-GHz",
+    fap_description="Honda Key Fob replay for CVE-2022-27254 (educational purposes only)",
+    fap_author="ayyappan162010",
+    fap_weburl="https://github.com/natfunkycat-lab-NaTo1000/FlipperZeroHondaFirmware",
+    fap_version="2.0",
+    stack_size=2 * 1024,
+)

@@ -673,4 +673,59 @@ bool flipper_format_insert_or_update_hex(
 
 #ifdef __cplusplus
 }
-#endif
+
+// ──────────────────────────────────────────────────────────────────────────────
+// C++ convenience overloads – accept FuriString* instead of string_t
+// These inline wrappers bridge the new FuriString API to the underlying
+// string_t-based implementation without any runtime overhead.
+// ──────────────────────────────────────────────────────────────────────────────
+
+#include <furi/core/string.h>
+
+inline bool flipper_format_read_header(
+    FlipperFormat* flipper_format,
+    FuriString*    filetype,
+    uint32_t*      version) {
+    string_t tmp;
+    string_init(tmp);
+    bool ok = flipper_format_read_header(flipper_format, tmp, version);
+    if(ok) furi_string_set_str(filetype, string_get_cstr(tmp));
+    string_clear(tmp);
+    return ok;
+}
+
+inline bool flipper_format_read_string(
+    FlipperFormat* flipper_format,
+    const char*    key,
+    FuriString*    data) {
+    string_t tmp;
+    string_init(tmp);
+    bool ok = flipper_format_read_string(flipper_format, key, tmp);
+    if(ok) furi_string_set_str(data, string_get_cstr(tmp));
+    string_clear(tmp);
+    return ok;
+}
+
+inline bool flipper_format_write_string(
+    FlipperFormat*    flipper_format,
+    const char*       key,
+    const FuriString* data) {
+    string_t tmp;
+    string_init_set_str(tmp, furi_string_get_cstr(data));
+    bool ok = flipper_format_write_string(flipper_format, key, tmp);
+    string_clear(tmp);
+    return ok;
+}
+
+inline bool flipper_format_update_string(
+    FlipperFormat*    flipper_format,
+    const char*       key,
+    const FuriString* data) {
+    string_t tmp;
+    string_init_set_str(tmp, furi_string_get_cstr(data));
+    bool ok = flipper_format_update_string(flipper_format, key, tmp);
+    string_clear(tmp);
+    return ok;
+}
+
+#endif // __cplusplus
