@@ -147,9 +147,9 @@ SubGhzViewTransmitter* subghz_view_transmitter_alloc() {
 
     with_view_model(
         subghz_transmitter->view, (SubGhzViewTransmitterModel * model) {
-            string_init(model->frequency_str);
-            string_init(model->preset_str);
-            string_init(model->key_str);
+            model->frequency_str = furi_string_alloc();
+            model->preset_str = furi_string_alloc();
+            model->key_str = furi_string_alloc();
             return true;
         });
     return subghz_transmitter;

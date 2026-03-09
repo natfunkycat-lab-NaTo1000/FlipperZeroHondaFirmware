@@ -112,6 +112,17 @@ void furi_string_reset(FuriString* string) {
     string_reset(string->str);
 }
 
+void furi_string_push_char(FuriString* string, char c) {
+    furi_assert(string);
+    char buf[2] = {c, '\0'};
+    string_cat_str(string->str, buf);
+}
+
+void furi_string_push_utf8_codepoint(FuriString* string, uint32_t codepoint) {
+    furi_assert(string);
+    string_push_u(string->str, (string_unicode_t)codepoint);
+}
+
 // ──────────────────────────────────────────────────────────────────────────────
 // Query
 // ──────────────────────────────────────────────────────────────────────────────
@@ -124,6 +135,11 @@ const char* furi_string_get_cstr(const FuriString* string) {
 size_t furi_string_size(const FuriString* string) {
     furi_assert(string);
     return string_size(string->str);
+}
+
+size_t furi_string_utf8_length(FuriString* string) {
+    furi_assert(string);
+    return string_length_u(string->str);
 }
 
 bool furi_string_empty(const FuriString* string) {

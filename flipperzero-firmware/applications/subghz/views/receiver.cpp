@@ -120,7 +120,7 @@ void subghz_view_receiver_add_item_to_menu(
         subghz_receiver->view, (SubGhzViewReceiverModel * model) {
             SubGhzReceiverMenuItem* item_menu =
                 SubGhzReceiverMenuItemArray_push_raw(model->history->data);
-            string_init_set_str(item_menu->item_str, name);
+            item_menu->item_str = furi_string_alloc_set_str(name);
             item_menu->type = type;
             if((model->idx == model->history_item - 1)) {
                 model->history_item++;
@@ -363,11 +363,11 @@ SubGhzViewReceiver* subghz_view_receiver_alloc() {
     view_set_enter_callback(subghz_receiver->view, subghz_view_receiver_enter);
     view_set_exit_callback(subghz_receiver->view, subghz_view_receiver_exit);
 
-    with_view_model(
+        with_view_model(
         subghz_receiver->view, (SubGhzViewReceiverModel * model) {
-            string_init(model->frequency_str);
-            string_init(model->preset_str);
-            string_init(model->history_stat_str);
+            model->frequency_str    = furi_string_alloc();
+            model->preset_str       = furi_string_alloc();
+            model->history_stat_str = furi_string_alloc();
             model->bar_show = SubGhzViewReceiverBarShowDefault;
             model->history = malloc(sizeof(SubGhzReceiverHistory));
             SubGhzReceiverMenuItemArray_init(model->history->data);

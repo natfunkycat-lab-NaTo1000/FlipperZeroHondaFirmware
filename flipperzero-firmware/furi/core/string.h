@@ -85,6 +85,12 @@ void furi_string_cat_printf(FuriString* string, const char* format, ...)
 /** Clear the string to an empty value (capacity is retained). */
 void furi_string_reset(FuriString* string);
 
+/** Append a single character to the end of @p string. */
+void furi_string_push_char(FuriString* string, char c);
+
+/** Append a Unicode codepoint (encoded as UTF-8) to the end of @p string. */
+void furi_string_push_utf8_codepoint(FuriString* string, uint32_t codepoint);
+
 // ──────────────────────────────────────────────────────────────────────────────
 // Query
 // ──────────────────────────────────────────────────────────────────────────────
@@ -94,6 +100,9 @@ const char* furi_string_get_cstr(const FuriString* string);
 
 /** Return the number of bytes (not codepoints) stored in the string. */
 size_t furi_string_size(const FuriString* string);
+
+/** Return the number of UTF-8 codepoints stored in the string. */
+size_t furi_string_utf8_length(FuriString* string);
 
 /** Return true if the string is empty. */
 bool furi_string_empty(const FuriString* string);

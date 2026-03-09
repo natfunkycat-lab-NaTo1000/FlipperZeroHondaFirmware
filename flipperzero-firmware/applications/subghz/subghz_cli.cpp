@@ -144,8 +144,8 @@ void subghz_cli_command_tx(Cli* cli, string_t args, void* context) {
         key,
         repeat);
 
-    FuriString* flipper_format_string = nullptr;
-    string_init_printf(
+    FuriString* flipper_format_string = furi_string_alloc();
+    furi_string_printf(
         flipper_format_string,
         "Protocol: Princeton\n"
         "Bit: 24\n"
@@ -593,8 +593,8 @@ static void subghz_cli_command_chat(Cli* cli, string_t args) {
                 break;
             } else if(
                 (chat_event.c == CliSymbolAsciiBackspace) || (chat_event.c == CliSymbolAsciiDel)) {
-                size_t len = string_length_u(input);
-                if(len > string_length_u(name)) {
+                size_t len = furi_string_utf8_length(input);
+                if(len > furi_string_utf8_length(name)) {
                     printf("%s", "\e[D\e[1P");
                     fflush(stdout);
                     //delete 1 char UTF
@@ -606,7 +606,7 @@ static void subghz_cli_command_chat(Cli* cli, string_t args) {
                     while(*str) {
                         m_str1ng_utf8_decode(*str, &s, &u);
                         if((s == M_STRING_UTF8_ERROR) || s == M_STRING_UTF8_STARTING) {
-                            string_push_u(sysmsg, u);
+                            furi_string_push_utf8_codepoint(sysmsg, u);
                             if(++size >= len - 1) break;
                             s = M_STRING_UTF8_STARTING;
                         }
@@ -616,8 +616,8 @@ static void subghz_cli_command_chat(Cli* cli, string_t args) {
                 }
             } else if(chat_event.c == CliSymbolAsciiCR) {
                 printf("\r\n");
-                string_push_back(input, '\r');
-                string_push_back(input, '\n');
+                furi_string_push_char(input, '\r');
+                furi_string_push_char(input, '\n');
                 while(!subghz_chat_worker_write(
                     subghz_chat,
                     (uint8_t*)furi_string_get_cstr(input),
@@ -633,14 +633,14 @@ static void subghz_cli_command_chat(Cli* cli, string_t args) {
             } else {
                 putc(chat_event.c, stdout);
                 fflush(stdout);
-                string_push_back(input, chat_event.c);
+                furi_string_push_char(input, chat_event.c);
                 break;
             case SubGhzChatEventRXData:
                 do {
                     memset(message, 0x00, message_max_len);
                     size_t len = subghz_chat_worker_read(subghz_chat, message, message_max_len);
                     for(size_t i = 0; i < len; i++) {
-                        string_push_back(output, message[i]);
+                        furi_string_push_char(output, message[i]);
                         if(message[i] == '\n') {
                             printf("\r");
                             for(uint8_t i = 0; i < 80; i++) {
@@ -658,7 +658,7 @@ static void subghz_cli_command_chat(Cli* cli, string_t args) {
                 notification_message(notification, &sequence_single_vibro);
                 break;
             case SubGhzChatEventUserEntrance:
-                string_printf(
+                furi_string_printf(
                     sysmsg,
                     "\033[0;34m%s joined chat.\033[0m\r\n",
                     furi_hal_version_get_name_ptr());
@@ -668,7 +668,7 @@ static void subghz_cli_command_chat(Cli* cli, string_t args) {
                     strlen(furi_string_get_cstr(sysmsg)));
                 break;
             case SubGhzChatEventUserExit:
-                string_printf(
+                furi_string_printf(
                     sysmsg, "\033[0;31m%s left chat.\033[0m\r\n", furi_hal_version_get_name_ptr());
                 subghz_chat_worker_write(
                     subghz_chat,

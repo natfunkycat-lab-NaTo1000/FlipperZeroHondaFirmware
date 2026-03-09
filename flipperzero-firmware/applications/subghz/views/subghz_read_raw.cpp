@@ -501,10 +501,10 @@ SubGhzReadRAW* subghz_read_raw_alloc() {
 
     with_view_model(
         instance->view, (SubGhzReadRAWModel * model) {
-            string_init(model->frequency_str);
-            string_init(model->preset_str);
-            string_init(model->sample_write);
-            string_init(model->file_name);
+            model->frequency_str = furi_string_alloc();
+            model->preset_str    = furi_string_alloc();
+            model->sample_write  = furi_string_alloc();
+            model->file_name     = furi_string_alloc();
             model->rssi_history = malloc(SUBGHZ_READ_RAW_RSSI_HISTORY_SIZE * sizeof(uint8_t));
             return true;
         });
