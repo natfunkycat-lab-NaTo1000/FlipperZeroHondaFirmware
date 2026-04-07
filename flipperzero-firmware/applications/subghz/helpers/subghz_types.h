@@ -1,6 +1,5 @@
 #pragma once
 
-#include "m-string.h"
 #include <furi.h>
 #include <furi_hal.h>
 
@@ -73,10 +72,10 @@ typedef enum {
 } SubGhzViewId;
 
 struct SubGhzPresetDefinition {
-    string_t name;
-    uint32_t frequency;
-    uint8_t* data;
-    size_t data_size;
+    FuriString* name;   /**< Preset name (FuriString, upgraded from string_t) */
+    uint32_t    frequency;
+    uint8_t*    data;
+    size_t      data_size;
 };
 
 typedef struct SubGhzPresetDefinition SubGhzPresetDefinition;

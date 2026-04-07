@@ -76,4 +76,33 @@ bool path_contains_only_ascii(const char* path);
 
 #ifdef __cplusplus
 }
-#endif
+
+// ──────────────────────────────────────────────────────────────────────────────
+// C++ convenience overloads – accept FuriString* instead of string_t
+// ──────────────────────────────────────────────────────────────────────────────
+
+#include <furi/core/string.h>
+
+inline void path_extract_filename(FuriString* path, FuriString* filename, bool trim_ext) {
+    string_t tmp_path, tmp_filename;
+    string_init_set_str(tmp_path, furi_string_get_cstr(path));
+    string_init(tmp_filename);
+    path_extract_filename(tmp_path, tmp_filename, trim_ext);
+    furi_string_set_str(filename, string_get_cstr(tmp_filename));
+    string_clear(tmp_path);
+    string_clear(tmp_filename);
+}
+
+inline void path_extract_dirname(const char* path, FuriString* dirname) {
+    string_t tmp;
+    string_init(tmp);
+    path_extract_dirname(path, tmp);
+    furi_string_set_str(dirname, string_get_cstr(tmp));
+    string_clear(tmp);
+}
+
+inline void path_extract_dirname(FuriString* path, FuriString* dirname) {
+    path_extract_dirname(furi_string_get_cstr(path), dirname);
+}
+
+#endif // __cplusplus

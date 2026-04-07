@@ -77,3 +77,18 @@ struct SubGhzProtocolEncoderBase {
 
     // Callback section
 };
+
+#ifdef __cplusplus
+// FuriString* overload for C++ callers
+#include <furi/core/string.h>
+inline bool subghz_protocol_decoder_base_get_string(
+    SubGhzProtocolDecoderBase* decoder_base,
+    FuriString*                output) {
+    string_t tmp;
+    string_init(tmp);
+    bool ok = subghz_protocol_decoder_base_get_string(decoder_base, tmp);
+    furi_string_set_str(output, string_get_cstr(tmp));
+    string_clear(tmp);
+    return ok;
+}
+#endif

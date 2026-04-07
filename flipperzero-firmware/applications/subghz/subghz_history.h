@@ -7,6 +7,10 @@
 #include <lib/flipper_format/flipper_format.h>
 #include "helpers/subghz_types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct SubGhzHistory SubGhzHistory;
 
 /** Allocate SubGhzHistory
@@ -71,18 +75,18 @@ const char* subghz_history_get_protocol_name(SubGhzHistory* instance, uint16_t i
 /** Get string item menu to history[idx]
  * 
  * @param instance  - SubGhzHistory instance
- * @param output    - string_t output
+ * @param output    - FuriString* output
  * @param idx       - record index
  */
-void subghz_history_get_text_item_menu(SubGhzHistory* instance, string_t output, uint16_t idx);
+void subghz_history_get_text_item_menu(SubGhzHistory* instance, FuriString* output, uint16_t idx);
 
 /** Get string the remaining number of records to history
  * 
  * @param instance  - SubGhzHistory instance
- * @param output    - string_t output
- * @return bool - is FUUL
+ * @param output    - FuriString* output
+ * @return bool - is FULL
  */
-bool subghz_history_get_text_space_left(SubGhzHistory* instance, string_t output);
+bool subghz_history_get_text_space_left(SubGhzHistory* instance, FuriString* output);
 
 /** Add protocol to history
  * 
@@ -103,3 +107,7 @@ bool subghz_history_add_to_history(
  * @return SubGhzProtocolCommonLoad*
  */
 FlipperFormat* subghz_history_get_raw_data(SubGhzHistory* instance, uint16_t idx);
+
+#ifdef __cplusplus
+}
+#endif
